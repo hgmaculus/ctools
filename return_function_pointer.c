@@ -1,3 +1,4 @@
+// H. Gabriel Maculus <gabrielmaculus@gmail.com>
 #include <stdio.h>
 
 typedef void (*functype)();
