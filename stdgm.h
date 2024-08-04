@@ -10,7 +10,7 @@
 
 #define array_size(arr) (sizeof(arr) / sizeof((arr)[0]))
 
-#define pout(s) fputs(s, stdout)
+#define out(s) fputs(s, stdout)
 
 typedef int (*printf_p)(const char *cad, ...);
 typedef int (*pf)();
@@ -20,10 +20,10 @@ printf_p p = printf;
 // return false if file not exist, or true if file exists
 bool fileexist(const char *filename)
 {
-    FILE *f = fopen(filename, "r");
-    bool r = f ? true : false;
-    if(f) fclose(f);
-    return r;
+  FILE *f = fopen(filename, "r");
+  bool r = f ? true : false;
+  if(f) fclose(f);
+  return r;
 }
 
 size_t filesize(const char *filename) {
@@ -39,6 +39,22 @@ size_t filesize(const char *filename) {
   return fsize;
 }
 
+
+// Seccion cadenas, funciones para manipulacion de cadenas
+
+// Concatena la cadena apuntada por src al final de la cadena dst
+int stringconcat(char *dst, char *src) {
+  while(*dst != '\0'){ dst++; }// encuentra el final de la cadena
+  while(*src != '\0'){
+    *dst = *src;
+    src++;
+    dst++;
+  }
+  *dst = '\0';
+  return 0;
+}
+
+// Determina el tamano de una cadena
 size_t stringsize(const char *restrict word) {
   size_t count=0;
   while(*word != '\0') {
