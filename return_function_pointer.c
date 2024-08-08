@@ -1,16 +1,16 @@
 // H. Gabriel Maculus <gabrielmaculus@gmail.com>
 #include <stdio.h>
 
-typedef void (*functype)();
+typedef void (*functype)(void);
 
-void h1() { printf("H1\n"); }
-void h2() { printf("H2\n"); }
-void h3() { printf("H3\n"); }
+void h1(void) { printf("H1\n"); }
+void h2(void) { printf("H2\n"); }
+void h3(void) { printf("H3\n"); }
 functype funcs[] = { h1, h2, h3 };
-functype f1() { return h1; }
+functype f1(void) { return h1; }
 int main(int argc, char *argv[])
 {
-  void (*selector)() = f1();
+  void (*selector)(void) = f1();
   selector();
   return 0;
 }

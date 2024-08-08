@@ -105,6 +105,7 @@ size_t stringfind(const char *restrict word, FILE *restrict fd) {
 
 char int2char(int a) { return (char)a; }
 char long2char(long a) { return (char)a; }
+
 int inci(int i) { if((i+1) > i) ++i; return i; }
 long int incl(long int i) { if((i+1) > i) ++i; return i; }
 size_t incs(size_t i) { if((i+1) > i) ++i; return i; }
