@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <termios.h>
+#include <unistd.h>
 
 #define array_size(arr) (sizeof(arr) / sizeof((arr)[0]))
 
@@ -101,6 +103,31 @@ size_t stringfind(const char *restrict word, FILE *restrict fd) {
     }
   }
   return location;
+}
+
+// Seccion caracteres, funciones para manipulacion de caracteres
+/* lee una tecla presionada sin mostrar en la salida estandar */
+int getch(void) {
+    struct termios oldattr, newattr;
+    tcgetattr(STDIN_FILENO, &oldattr);
+    newattr = oldattr;
+    newattr.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+    int ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+    return ch;
+}
+
+/* lee una tecla presionada y la muestra en la salida estandar */
+int getche(void) {
+    struct termios oldattr, newattr;
+    tcgetattr(STDIN_FILENO, &oldattr);
+    newattr = oldattr;
+    newattr.c_lflag &= ~(ICANON);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+    int ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+    return ch;
 }
 
 char int2char(int a) { return (char)a; }
