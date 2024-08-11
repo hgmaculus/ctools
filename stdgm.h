@@ -148,7 +148,29 @@ void stringgete(char *str, size_t n, char stop) {
     }
     *str = '\0';
     tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+}
+/* Lee una secuencia de hasta n caracteres y
+lo guarda en la cadena apuntada por str, si
+se ingresa el caracter de stop sale inmediatamente
+Sin mostrar los caracteres ingresados en la pantalla,
+se usa para el ingreso de datos sensibles
 
+*/
+void stringget(char *str, size_t n, char stop) {
+    struct termios oldattr, newattr;
+    tcgetattr(STDIN_FILENO, &oldattr);
+    newattr = oldattr;
+    newattr.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+    while (n) {
+        *str = getchar();
+        if (*str == stop)
+            break;
+        str++;
+        n--;
+    }
+    *str = '\0';
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
 }
 char int2char(int a) { return (char)a; }
 char long2char(long a) { return (char)a; }
