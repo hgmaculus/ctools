@@ -20,8 +20,7 @@ typedef pf arrayfp[];
 printf_p p = printf;
 
 // return false if file not exist, or true if file exists
-bool fileexist(const char *filename)
-{
+bool fileexist(const char *filename) {
   FILE *f = fopen(filename, "r");
   bool r = f ? true : false;
   if(f) fclose(f);
@@ -130,6 +129,27 @@ int getche(void) {
     return ch;
 }
 
+/* Lee una secuencia de hasta n caracteres y 
+lo guarda en la cadena apuntada por str, si 
+se ingresa el caracter de stop sale inmediatamente
+La cadena apuntada por str debe ser mayor que n
+*/
+void stringgete(char *str, size_t n, char stop) {
+    struct termios oldattr, newattr;
+    tcgetattr(STDIN_FILENO, &oldattr);
+    newattr = oldattr;
+    newattr.c_lflag &= ~(ICANON);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+    while(n) {
+        *str = getchar();
+        if(*str == stop) break;
+        str++;
+        n--;
+    }
+    *str = '\0';
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+
+}
 char int2char(int a) { return (char)a; }
 char long2char(long a) { return (char)a; }
 
