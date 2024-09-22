@@ -172,6 +172,35 @@ void stringget(char *str, size_t n, char stop) {
     *str = '\0';
     tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
 }
+
+int compare2files(const char *sname, const char *dname){
+  FILE *s = fopen(sname, "r");
+  FILE *d = fopen(dname, "r");
+
+  if(!s) {
+    fclose(d);
+    return -1; // -1 source not found or can't read
+  }
+  if(!d){
+    fclose(s);
+    return -2; // -2 destination not write permission or can't write
+  } 
+
+  {
+    char sa, db;
+    while(!feof(s) && !feof(d)) {
+      sa = fgetc(s);
+      db = fgetc(d);
+      if(sa != db ) break;
+    }
+    if(feof(s) && feof(d)) return 0;
+    else return -1;
+  }
+
+  fclose(s);
+  fclose(d);	
+}
+
 char int2char(int a) { return (char)a; }
 char long2char(long a) { return (char)a; }
 
