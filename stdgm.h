@@ -44,25 +44,23 @@ size_t filesize(const char *filename) {
 }
 
 int file_copy_continue(const char *source, const char *destination) {
-
-  if(filesize(source) == filesize(destination)) return 0; // files are equal
-  
   if (!fileexist(source)) {
     return -1;
   }
 
-  FILE *fd, *fs = fopen(source, "r");
+  FILE *fd, *fs;
   
   if(fileexist(destination)) { // continue previous copy
-  
+    if(filesize(source) == filesize(destination)) {
+     return 0; // files are equal 
+    }
     fd = fopen(destination, "a");
-    long position=ftell(fd);
-    fseek(fs, position, SEEK_SET);
-    printf("Continue copy at position: %ld\n", position);
   } else {
     fd = fopen(destination, "w"); //new file and new copy
-    printf("Start a copy from zero\n");
   }
+  fs = fopen(source, "r");
+  long position=ftell(fd);
+  fseek(fs, position, SEEK_SET);
   int c;
   while (!feof(fs)) {
     c = fgetc(fs);
