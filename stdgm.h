@@ -22,9 +22,12 @@ printf_p p = printf;
 // return false if file not exist, or true if file exists
 bool fileexist(const char *filename) {
   FILE *f = fopen(filename, "r");
-  bool r = f ? true : false;
-  if(f) fclose(f);
-  return r;
+  if(f) {
+    fclose(f);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 size_t filesize(const char *filename) {
@@ -40,6 +43,36 @@ size_t filesize(const char *filename) {
   return fsize;
 }
 
+int file_copy_continue(const char *source, const char *destination) {
+
+  if(filesize(source) == filesize(destination)) return 0; // files are equal
+  
+  if (!fileexist(source)) {
+    return -1;
+  }
+
+  FILE *fd, *fs = fopen(source, "r");
+  
+  if(fileexist(destination)) { // continue previous copy
+  
+    fd = fopen(destination, "a");
+    long position=ftell(fd);
+    fseek(fs, position, SEEK_SET);
+    printf("Continue copy at position: %ld\n", position);
+  } else {
+    fd = fopen(destination, "w"); //new file and new copy
+    printf("Start a copy from zero\n");
+  }
+  int c;
+  while (!feof(fs)) {
+    c = fgetc(fs);
+    if(c != EOF) fputc(c, fd);
+  }
+
+  fclose(fs);
+  fclose(fd);
+  return 0;
+}
 
 // Seccion cadenas, funciones para manipulacion de cadenas
 
@@ -107,70 +140,70 @@ size_t stringfind(const char *restrict word, FILE *restrict fd) {
 // Seccion caracteres, funciones para manipulacion de caracteres
 /* lee una tecla presionada sin mostrar en la salida estandar */
 int getch(void) {
-    struct termios oldattr, newattr;
-    tcgetattr(STDIN_FILENO, &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-    int ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
-    return ch;
+  struct termios oldattr, newattr;
+  tcgetattr(STDIN_FILENO, &oldattr);
+  newattr = oldattr;
+  newattr.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+  int ch = getchar();
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+  return ch;
 }
 
 /* lee una tecla presionada y la muestra en la salida estandar */
 int getche(void) {
-    struct termios oldattr, newattr;
-    tcgetattr(STDIN_FILENO, &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~(ICANON);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-    int ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
-    return ch;
+  struct termios oldattr, newattr;
+  tcgetattr(STDIN_FILENO, &oldattr);
+  newattr = oldattr;
+  newattr.c_lflag &= ~(ICANON);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+  int ch = getchar();
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+  return ch;
 }
 
 /* Lee una secuencia de hasta n caracteres y 
-lo guarda en la cadena apuntada por str, si 
-se ingresa el caracter de stop sale inmediatamente
-La cadena apuntada por str debe ser mayor que n
+   lo guarda en la cadena apuntada por str, si 
+   se ingresa el caracter de stop sale inmediatamente
+   La cadena apuntada por str debe ser mayor que n
 */
 void stringgete(char *str, size_t n, char stop) {
-    struct termios oldattr, newattr;
-    tcgetattr(STDIN_FILENO, &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~(ICANON);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-    while(n) {
-        *str = getchar();
-        if(*str == stop) break;
-        str++;
-        n--;
-    }
-    *str = '\0';
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+  struct termios oldattr, newattr;
+  tcgetattr(STDIN_FILENO, &oldattr);
+  newattr = oldattr;
+  newattr.c_lflag &= ~(ICANON);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+  while(n) {
+    *str = getchar();
+    if(*str == stop) break;
+    str++;
+    n--;
+  }
+  *str = '\0';
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
 }
 /* Lee una secuencia de hasta n caracteres y
-lo guarda en la cadena apuntada por str, si
-se ingresa el caracter de stop sale inmediatamente
-Sin mostrar los caracteres ingresados en la pantalla,
-se usa para el ingreso de datos sensibles
+   lo guarda en la cadena apuntada por str, si
+   se ingresa el caracter de stop sale inmediatamente
+   Sin mostrar los caracteres ingresados en la pantalla,
+   se usa para el ingreso de datos sensibles
 
 */
 void stringget(char *str, size_t n, char stop) {
-    struct termios oldattr, newattr;
-    tcgetattr(STDIN_FILENO, &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-    while (n) {
-        *str = getchar();
-        if (*str == stop)
-            break;
-        str++;
-        n--;
-    }
-    *str = '\0';
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+  struct termios oldattr, newattr;
+  tcgetattr(STDIN_FILENO, &oldattr);
+  newattr = oldattr;
+  newattr.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+  while (n) {
+    *str = getchar();
+    if (*str == stop)
+      break;
+    str++;
+    n--;
+  }
+  *str = '\0';
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
 }
 
 int compare2files(const char *sname, const char *dname){
