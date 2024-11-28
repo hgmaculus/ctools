@@ -1,15 +1,8 @@
 /* One Shot Copy by H. Gabriel Máculus <gabrielmaculus@gmail.com>
- * 
-*/
+ * One Read and One Write
+ */
 #include <stdio.h>
 #include <stdlib.h>
-
-struct memregion
-{
-  size_t size;
-  void *chunk;
-};
-
 
 int main(int argc, char *argv[])
 {
@@ -23,8 +16,8 @@ int main(int argc, char *argv[])
     return -1; // -1 source not found or can't read
   }
   if(!d){
-        fclose(s);
-	return -2; // -2 destination not write permission or can't write
+    fclose(s);
+    return -2; // -2 destination not write permission or can't write
   } 
   
   // file size start
