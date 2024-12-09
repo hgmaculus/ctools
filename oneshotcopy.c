@@ -21,18 +21,21 @@ int main(int argc, char *argv[])
   } 
   
   // file size start
-  FILE *f = fopen(argv[1], "r");
-  if(!f) return -1;
+
   
-  fseek(f, 0, SEEK_END);
-  size_t fssize = ftell(f);
-  
-  fclose(f);
+  fseek(s, 0, SEEK_END);
+  size_t fssize = ftell(s);
+  fseek(s, 0, SEEK_SET);
+
   // file size end
 
   // assign memory start
   void *mem = malloc(fssize);
-  if(!mem) return -2; // mem failed
+  if(!mem) {
+    fclose(s);
+    fclose(d);
+    return -2; // mem failed
+  }
   
   // assign memory end
   
