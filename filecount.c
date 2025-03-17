@@ -1,5 +1,5 @@
 /* filecount by H. Gabriel Máculus <gabrielmaculus@gmail.com>
-	
+ Print number of bytes in file specified by argument	
 */
 
 #include <stdio.h>
