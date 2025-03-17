@@ -1,4 +1,4 @@
 # ctools
 
-tools and functions for help writted in c
+tools and functions helper writted in c
 
