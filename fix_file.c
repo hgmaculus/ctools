@@ -1,4 +1,4 @@
-/* Mini fix file compare by H. Gabriel Máculus <gabrielmaculus@gmail.com>
+/* Mini fix file by H. Gabriel Máculus <gabrielmaculus@gmail.com>
  * 
  */
 #include <stdio.h>
@@ -6,9 +6,10 @@
 
 int file_trunc(const char *a) {
   FILE *f = fopen(a, "w"); // truncate to 0, -> extract to function
-  fclose(f);
+  if(f) fclose(f);
   return 0;
 }
+
 // return false if file not exist, or true if file exists
 bool fileexist(const char *filename) {
   FILE *f = fopen(filename, "r");
@@ -33,27 +34,36 @@ size_t filesize(const char *filename) {
   return fsize;
 }
 
-
 int file_copy_continue(const char *source, const char *destination) {
   if (!fileexist(source)) {
     return -1;
   }
-
   FILE *fd, *fs;
+  fs = fopen(source, "r");
+  if(!fs) return -2;
   
   if(fileexist(destination)) { // continue previous copy
     if(filesize(source) == filesize(destination)) {
+      fclose(fs);
       return 0; // files are equal 
     }
     fd = fopen(destination, "a");
   } else {
     fd = fopen(destination, "w"); //new file and new copy
   }
-  fs = fopen(source, "r");
+  if(!fd) {
+    fclose(fs);
+    return -3;
+  }
   long position=ftell(fd);
+  if(position == -1) {
+    fclose(fs);
+    fclose(fd);
+    return -3;
+  }
   fseek(fs, position, SEEK_SET);
   int c;
-  while (!feof(fs)) {
+  while (!feof(fs)) { // copy each char from fs (file source) to fd (file destination)
     c = fgetc(fs);
     if(c != EOF) fputc(c, fd);
   }
@@ -102,12 +112,12 @@ int main(int argc, char *argv[])
   size_t d_size =filesize(argv[2]);
   if(s_size > d_size) { // destination maybe incomplete
     file_copy_continue(argv[1], argv[2]);// puts("Destination incomplete: calling file_copy_continue");
-    fix_file(argv[1], argv[2]);
+    fix_file(argv[1], argv[2]); // after continue copy do the check
   } else if(d_size > s_size) { // need trunc to s_size
     file_trunc(argv[2]);
     file_copy_continue(argv[1], argv[2]);// puts("Destination broken: copy new file");
-  } else if(d_size == s_size) {
-    fix_file(argv[1], argv[2]);
+  } else if(d_size == s_size) { 
+    fix_file(argv[1], argv[2]); // file are equal size, check for differences
   }
   
   return 0;
