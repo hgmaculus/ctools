@@ -97,7 +97,7 @@ int fix_file(const char *sname, const char *dname){
       if(sa != db ) { // difference
 	printf("Fixing difference at: %ld\n", ftell(s));
 	fseek(d, -1, SEEK_CUR);
-	ret = fputc(sa, d);
+	fputc(sa, d);
       }
     }
   }

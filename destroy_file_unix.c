@@ -12,10 +12,9 @@ int main(int argc, char *argv[]) {
   puts("Usage: ./destroy_file file_to_destroy whence text-to-insert ");
   if(argc != 4) return 1;
   int fp = open(argv[1], O_RDWR);
-  if(fp == -1) return -1;
+  if(fp == -1) return 1;
   size_t s=lseek(fp, 0, SEEK_END); // file size
   size_t parm2 = atol(argv[2]);
-  printf("File size to: %ld\n", s);
   if(s < parm2) {
     close(fp);
     return 2; 

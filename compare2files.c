@@ -5,32 +5,39 @@
 
 int compare2files(const char *sname, const char *dname){
   FILE *s = fopen(sname, "r");
+  
+  if(!s) return 1; // 1 source not found or can't read
+
   FILE *d = fopen(dname, "r");
 
-  if(!s) {
-    fclose(d);
-    return -1; // -1 source not found or can't read
-  }
-  if(!d){
+  if (!d)
+  {
     fclose(s);
-    return -2; // -2 destination not found or can't read
-  } 
+    return 2; // 2 destination not found or can't read
+  }
 
   {
     char sa, db;
-    while(!feof(s) && !feof(d)) {
+    while (!feof(s) && !feof(d))
+    {
       sa = fgetc(s);
       db = fgetc(d);
-      if(sa != db ) break;
+      if (sa != db)
+        break;
     }
-    if(feof(s) && feof(d)) return 0;
-    else { 
-		fclose(s);
-		fclose(d);
-	}
+    if (feof(s) && feof(d))
+    {
+      fclose(s);
+      fclose(d);
+      return 0;
+    }
+    else
+    {
+      fclose(s);
+      fclose(d);
+      return 3;
+    }
   }
-
-  return -1;
 }
 int main(int argc, char *argv[])
 {
