@@ -28,6 +28,8 @@ int compare2files(const char *sname, const char *dname)
     }
     lseek(s, 0, SEEK_SET);
     lseek(d, 0, SEEK_SET);
+    printf("%s size: %zu\n", sname, ssize);
+    printf("%s size: %zu\n", dname, dsize);
     for (size_t i = ssize; i != 0; i--)
     {
       read(s, &sa, 1);
