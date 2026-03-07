@@ -1,4 +1,4 @@
-/* file_copy_continue_unix by H. Gabriel Maculus <gabrielmaculus@gmail.com> */
+/* file sync unix by H. Gabriel Maculus <gabrielmaculus@gmail.com> */
 
 #include <fcntl.h>
 #include <unistd.h>
