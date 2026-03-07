@@ -57,7 +57,6 @@ int file_copy_continue_unix(const char *source, const char *destination)
   }
   else
   {
-    puts("New Copy");
     fs = open(source, O_RDONLY);
     struct stat fs_stat;
     fstat(fs, &fs_stat);
@@ -110,8 +109,7 @@ int fix_file_unix(const char *sname, const char *dname)
       read(d, &db, 1);
       if (sa != db)
       {
-        printf("Fix at: %zu", )
-            lseek(d, -1, SEEK_CUR);
+        printf("Fix at: %zu\n", lseek(d, -1, SEEK_CUR));
         write(d, &sa, 1);
       }
     }
@@ -131,6 +129,7 @@ int main(int argc, char *argv[])
   size_t s_size = filesize_unix(argv[1]);
   size_t d_size = filesize_unix(argv[2]);
 
+  file_copy_continue_unix(argv[1], argv[2]); // after continue copy do the check
   fix_file_unix(argv[1], argv[2]); // after continue copy do the check
 
   return 0;
