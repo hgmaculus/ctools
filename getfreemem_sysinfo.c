@@ -15,6 +15,7 @@ int main(int argc, char *argv[]) {
   printf("Free: %lu\n", s.freeram);
   printf("Buffered: %lu\n", s.bufferram);
   printf("High: %lu\n", s.freehigh);
+  printf("Shared: %lu\n", s.sharedram);
 
   return 0;
 }
