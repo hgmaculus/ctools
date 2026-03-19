@@ -1,15 +1,11 @@
 /* File splash by H. Gabriel Máculus <gabrielmaculus@gmail.com>
 */
-
 #include <stdio.h>
-int main(int argc, char *argv[])
-{
-  if(argc!=2) {
-    puts("Usage: file_splash myfile.txt");
-    return 0;
-  }
-  FILE *fp = fopen(argv[1], "r+");
-  if(!fp) return 1;
+#include <stdbool.h>
+
+bool file_splash(const char *restrict filename) {
+  FILE *fp = fopen(filename, "r+");
+  if(!fp) return false;
   fseek(fp, 0, SEEK_END);
   size_t sz = ftell(fp);
   fseek(fp, 0, SEEK_SET);
@@ -18,5 +14,15 @@ int main(int argc, char *argv[])
     putchar('.');
   }
   fclose(fp);
+  return true;
+}
+int main(int argc, char *argv[])
+{
+  if(argc!=2) {
+    puts("Usage: file_splash myfile.txt");
+    return 0;
+  }
+  file_splash(argv[1]);
+
   return 0;
 }
