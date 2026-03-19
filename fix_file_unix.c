@@ -53,7 +53,7 @@ int file_copy_continue_unix(const char *source, const char *destination)
     printf("Position %lu\n", position);
     off_t position_src = lseek(fs, position, SEEK_SET);
     // printf("Position Source %lu\n", position_src);
-    fs_size = filesize_unix(source) - position;
+    fs_size = position_src - position;
   }
   else
   {
@@ -126,8 +126,8 @@ int main(int argc, char *argv[])
     puts("Usage: fix_file_unix source_file destination_file");
     return -3;
   }
-  size_t s_size = filesize_unix(argv[1]);
-  size_t d_size = filesize_unix(argv[2]);
+  //  size_t s_size = filesize_unix(argv[1]);
+  //  size_t d_size = filesize_unix(argv[2]);
 
   file_copy_continue_unix(argv[1], argv[2]); // after continue copy do the check
   fix_file_unix(argv[1], argv[2]); // after continue copy do the check
