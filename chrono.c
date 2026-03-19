@@ -10,12 +10,12 @@ void chrono() {
   static clock_t start, stop;
   static int started = 0;
   if(started) {
-    started = 0;
     stop = clock();
     printf("Timing %f\n", (double)(stop - start)/CLOCKS_PER_SEC);
+    started = 0;
   } else {
-    started = 1;
     start = clock();
+    started = 1;
   }
 }
 int main(int argc, char *argv[])
