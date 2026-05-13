@@ -55,6 +55,7 @@ int file_sync(const char *sname, const char *dname){
 int main(int argc, char *argv[])
 {
   if(argc != 3) {
+    puts("file_sync a 100% ANSI C file synchronization");
     puts("Usage: filesync source destination");
     return -3; 
   }

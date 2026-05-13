@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int file_insert_string(const char *filename, const off_t offset, const char *string) {
+int file_insert_string_at(const char *filename, const off_t offset, const char *string) {
   FILE *fp = fopen(filename, "r+");
   if(!fp) return -1;
   fseek(fp, 0, SEEK_END);
@@ -17,6 +17,6 @@ int file_insert_string(const char *filename, const off_t offset, const char *str
 
 
 int main(int argc, char *argv[]) {
-	file_insert_string(argv[1], atol(argv[2]), argv[3]);
+	file_insert_string_at(argv[1], atol(argv[2]), argv[3]);
    return 0; 
 }
