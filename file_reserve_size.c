@@ -12,7 +12,7 @@ size_t file_size(const char *filename)
   FILE *f = fopen(filename, "r");
   if (!f)
   {
-    fprintf(stderr, "filesize(): file not found %s\n", filename);
+    fprintf(stderr, "file_size(): file not found %s\n", filename);
     return 0;
   }
 
@@ -44,7 +44,7 @@ size_t file_reserve_size(const char *filename, size_t size)
   {
     if (fallocate(fd, 0, 0, size) != 0)
     {
-      fprintf(stderr, "reserve_file_size(): fallocate failed %s\n", filename);
+      fprintf(stderr, "file_reserve_size(): fallocate failed %s\n", filename);
       fclose(f);
       return 0;
     }
@@ -62,7 +62,7 @@ size_t file_reserve_size(const char *filename, size_t size)
 
   if (file_size(filename) != size)
   {
-    fprintf(stderr, "reserve_file_size(): file size mismatch %s\n", filename);
+    fprintf(stderr, "file_reserve_size(): file size mismatch %s\n", filename);
     return 0;
   }
   return 0;
