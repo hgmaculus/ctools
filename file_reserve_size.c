@@ -30,11 +30,10 @@ size_t file_reserve_size(const char *filename, size_t size)
     fprintf(stderr, "file_reserve_size(): file not found %s\n", filename);
     return 0;
   }
-  int fd = fileno(f);
-
   struct statfs s;
   statfs(filename, &s);
   // printf("Filesystem type: %lx \n", s.f_type);
+  int fd = fileno(f);
   switch (s.f_type)
   {
 
@@ -48,11 +47,15 @@ size_t file_reserve_size(const char *filename, size_t size)
       fclose(f);
       return 0;
     }
+    else
+    {
+      printf("file_reserve_size(): fallocate success %s\n", filename);
+    }
     break;
   }
 
   default:
-    printf("unknown filesystem: not fallocate supported\n");
+    printf("Unknown filesystem: fallocate not supported\n");
     break;
   }
 
