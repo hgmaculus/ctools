@@ -3,6 +3,17 @@
 #include <sys/fcntl.h>
 #include <sys/types.h>
 
+
+mode_t file_get_perms(const char *filename)
+{
+    struct stat st;
+    if (stat(filename, &st) != 0)
+    {
+        perror("file_get_perms: stat failed");
+        return (mode_t)-1;
+    }
+    return st.st_mode;
+}
 int file_copy_perms(const char *src, const char *dst)
 {
     struct stat st;
